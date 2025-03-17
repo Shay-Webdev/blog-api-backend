@@ -1,0 +1,58 @@
+{
+  "name": "blog-api-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc && node dist/index.js",
+    "typecheck": "tsc --watch --noEmit",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:deploy": "prisma migrate deploy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shay-Webdev/blog-api-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Shay-Webdev/blog-api-backend/issues"
+  },
+  "homepage": "https://github.com/Shay-Webdev/blog-api-backend#readme",
+  "dependencies": {
+    "@prisma/client": "^6.5.0",
+    "@quixo3/prisma-session-store": "^3.1.13",
+    "bcryptjs": "^3.0.2",
+    "cloudinary": "^2.6.0",
+    "connect-flash": "^0.1.1",
+    "connect-pg-simple": "^10.0.0",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "express-validator": "^7.2.1",
+    "multer": "^1.4.5-lts.1",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "pg": "^8.14.1",
+    "prisma": "^6.5.0"
+  },
+  "devDependencies": {
+    "@tsconfig/node22": "^22.0.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/connect-flash": "^0.0.40",
+    "@types/connect-pg-simple": "^7.0.3",
+    "@types/express": "^5.0.0",
+    "@types/express-session": "^1.18.1",
+    "@types/multer": "^1.4.12",
+    "@types/node": "^22.13.10",
+    "@types/passport": "^1.0.17",
+    "@types/passport-local": "^1.0.38",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  }
+}
