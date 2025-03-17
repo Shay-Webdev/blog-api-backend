@@ -103,7 +103,7 @@ npx tsc --watch --noEmit
 "dev": "tsx watch src/index.ts",
 "build": "tsc && node dist/index.js",
 "typecheck": "tsc --watch --noEmit",
-"prisma:generate": "prisma generate",
-"prisma:migrate": "prisma migrate dev",
-"prisma:deploy": "prisma migrate deploy"
+"p:gen": "prisma generate",
+"p:mig": "prisma migrate dev",
+"p:dep": "prisma migrate deploy"
 },

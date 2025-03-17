@@ -13,6 +13,40 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id       Int       @id @default(autoincrement())
+  username String
+  email    String    @unique
+  password String
+  posts    Post[]
+  comments Comment[]
+  isAuthor Boolean   @default(false)
+}
+
+model Post {
+  id            Int       @id @default(autoincrement())
+  title         String
+  content       String
+  authorId      Int
+  author        User      @relation(fields: [authorId], references: [id])
+  comments      Comment[]
+  isPublished   Boolean   @default(false)
+  publishedDate DateTime  @default(now())
+  updatedDate   DateTime  @default(now())
+}
+
+model Comment {
+  id          Int      @id @default(autoincrement())
+  content     String
+  postId      Int
+  post        Post     @relation(fields: [postId], references: [id])
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  isPosted    Boolean  @default(false)
+  postedDate  DateTime @default(now())
+  updatedDate DateTime @default(now())
+}
+
 model Session {
   id        String   @id
   sid       String   @unique
