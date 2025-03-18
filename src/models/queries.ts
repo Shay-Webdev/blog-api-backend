@@ -9,7 +9,7 @@ async function getAllPosts(): Promise<TPost[]> {
   return posts;
 }
 
-async function getAllUsers(): Promise<TUser[]> {
+async function getAllUsers(): Promise<Omit<TUser, 'posts' | 'comments'>[]> {
   const users = await prisma.user.findMany();
   return users;
 }
@@ -19,7 +19,9 @@ async function getAllComments(): Promise<TComment[]> {
   return comments;
 }
 
-async function getUserById(id: number): Promise<TUser | null> {
+async function getUserById(
+  id: number
+): Promise<Omit<TUser, 'posts' | 'comments'> | null> {
   const user = await prisma.user.findUnique({
     where: {
       id: id,
@@ -50,7 +52,7 @@ async function getCommentById(id: number): Promise<TComment | null> {
 
 async function createUser(
   user: Pick<TUser, 'username' | 'email' | 'password'>
-): Promise<TUser> {
+) {
   const newUser = await prisma.user.create({
     data: {
       username: user.username,
@@ -62,7 +64,7 @@ async function createUser(
   return newUser;
 }
 
-async function makeAuthor(userId: number): Promise<TUser> {
+async function makeAuthor(userId: number) {
   const author = await prisma.user.update({
     where: {
       id: userId,
