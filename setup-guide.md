@@ -105,5 +105,6 @@ npx tsc --watch --noEmit
 "typecheck": "tsc --watch --noEmit",
 "p:gen": "prisma generate",
 "p:mig": "prisma migrate dev",
-"p:dep": "prisma migrate deploy"
+"p:dep": "prisma migrate deploy",
+"p:studio": "prisma studio"
 },
