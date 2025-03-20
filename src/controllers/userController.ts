@@ -10,9 +10,13 @@ import {
   IPostRequestBody,
   ICommentRequestBody,
 } from '../types/request.js';
+import { AppError } from '../models/errors.js';
 
 async function getAllUsers(req: Request, res: Response<IUserResponse[]>) {
   const users = await db.getAllUsers();
+  if (!users) {
+    throw new AppError('No users found', 404);
+  }
   const userDetails = users.map((user) => {
     return {
       id: user.id,
@@ -27,21 +31,17 @@ async function getAllUsers(req: Request, res: Response<IUserResponse[]>) {
 
 async function createUser(
   req: Request<{}, {}, IUserRequestBody>,
-  res: Response
+  res: Response,
+  next: NextFunction
 ) {
-  try {
-    console.log('req body in createUser', req.body);
+  console.log('req body in createUser', req.body);
 
-    const user = await db.createUser(req.body);
-    if (!user) {
-      res.status(400).json({ error: 'User already exists' });
-    }
-
-    res.status(201).json(user);
-  } catch (error) {
-    console.error('createUser error:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+  const user = await db.createUser(req.body);
+  if (!user) {
+    throw new AppError('User already exists', 400);
   }
+
+  res.status(201).json({ message: 'User created successfully', user });
 }
 
 export { getAllUsers, createUser };
