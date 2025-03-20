@@ -1,14 +1,22 @@
 class AppError extends Error {
   statusCode: number;
-  status: string;
-  isOperational: boolean;
-  constructor(message: string, statusCode: number = 400) {
+  code?: string;
+  constructor(message: string, statusCode: number = 400, code?: string) {
     super(message);
     this.statusCode = statusCode;
-    this.status = statusCode > 400 && statusCode < 500 ? 'fail' : 'error';
-    this.isOperational = true;
-    Error.captureStackTrace(this, this.constructor);
+    this.code = code;
   }
 }
 
-export { AppError };
+class ValidationError extends AppError {
+  constructor(message: string, code?: string) {
+    super(message, 400, code);
+  }
+}
+
+class NotFoundError extends AppError {
+  constructor(message: string, code?: string) {
+    super(message, 404, code);
+  }
+}
+export { AppError, ValidationError, NotFoundError };

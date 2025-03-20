@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../models/errors.js';
+import { log } from 'console';
+import { sendError } from '../utils/response.js';
 
 const errorHandler = (
   err: AppError,
@@ -7,10 +9,17 @@ const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  const statusCode = err.statusCode || 500;
-  const message = err.message || 'Something went wrong';
-  const status = err.status || 'error';
-  res.status(statusCode).json({ status, message });
+  const error =
+    err instanceof AppError ? err : new AppError('Internal server error', 500);
+  if (process.env.NODE_ENV !== 'production') {
+    console.error(err);
+  } else {
+    console.error(
+      `[${new Date().toISOString()}] ${error.statusCode} ${error.message}`
+    );
+  }
+
+  sendError(res, error.message, error.statusCode, error.code);
 };
 
 export { errorHandler };

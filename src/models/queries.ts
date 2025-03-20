@@ -1,7 +1,8 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import 'dotenv/config';
 import { TComment, TPost, TUser } from '../types/types.js';
 import { title } from 'process';
+import { AppError, NotFoundError, ValidationError } from './errors.js';
 const prisma = new PrismaClient();
 
 async function getAllPosts(): Promise<TPost[]> {
@@ -27,7 +28,9 @@ async function getUserById(
       id: id,
     },
   });
-
+  if (!user) {
+    throw new NotFoundError('User not found', 'USER_NOT_FOUND');
+  }
   return user;
 }
 
@@ -53,15 +56,24 @@ async function getCommentById(id: number): Promise<TComment | null> {
 async function createUser(
   user: Pick<TUser, 'username' | 'email' | 'password'>
 ) {
-  const newUser = await prisma.user.create({
-    data: {
-      username: user.username,
-      email: user.email,
-      password: user.password,
-    },
-  });
+  try {
+    const newUser = await prisma.user.create({
+      data: {
+        username: user.username,
+        email: user.email,
+        password: user.password,
+      },
+    });
 
-  return newUser;
+    return newUser;
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+        throw new ValidationError('User already exists', 'EMAIL_EXISTS');
+      }
+    }
+    throw new AppError('Database error', 500);
+  }
 }
 
 async function makeAuthor(userId: number) {

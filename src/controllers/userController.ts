@@ -11,6 +11,7 @@ import {
   ICommentRequestBody,
 } from '../types/request.js';
 import { AppError } from '../models/errors.js';
+import { sendSuccess } from '../utils/response.js';
 
 async function getAllUsers(req: Request, res: Response<IUserResponse[]>) {
   const users = await db.getAllUsers();
@@ -26,7 +27,7 @@ async function getAllUsers(req: Request, res: Response<IUserResponse[]>) {
     };
   });
 
-  res.status(200).json(userDetails);
+  sendSuccess(res, userDetails, 200, 'Users fetched successfully');
 }
 
 async function createUser(
@@ -37,11 +38,7 @@ async function createUser(
   console.log('req body in createUser', req.body);
 
   const user = await db.createUser(req.body);
-  if (!user) {
-    throw new AppError('User already exists', 400);
-  }
-
-  res.status(201).json({ message: 'User created successfully', user });
+  sendSuccess(res, user, 201, 'User created successfully');
 }
 
 export { getAllUsers, createUser };
