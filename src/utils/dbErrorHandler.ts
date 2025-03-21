@@ -23,5 +23,18 @@ export function handleDbError(
         );
     }
   }
-  throw new DatabaseError('Unexpected database error');
+  if (error instanceof Prisma.PrismaClientValidationError) {
+    throw new DatabaseError(
+      `Database operation failed: ${error.message}`,
+      'DATABASE_VALIDATION_ERROR'
+    );
+  }
+  if (error instanceof Prisma.PrismaClientUnknownRequestError) {
+    throw new DatabaseError(
+      `Database operation failed: ${error.message}`,
+      'DATABASE_UNKNOWN_ERROR'
+    );
+  }
+
+  throw new DatabaseError(`Unexpected database error: ${error}`);
 }

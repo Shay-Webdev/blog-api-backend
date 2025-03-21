@@ -23,7 +23,26 @@ async function createPost(
   next: NextFunction
 ) {
   const post = req.body;
-  const createdPost = await db.createPostByAuthorId(post);
+
+  const authorId: number = Number(post.authorId);
+  const parsedPost: Pick<TPost, 'title' | 'content' | 'authorId'> = {
+    authorId,
+    content: post.content,
+    title: post.title,
+  };
+
+  console.log(
+    'type of post elements',
+    typeof parsedPost.title,
+    typeof parsedPost.content,
+    typeof parsedPost.authorId
+  );
+  const user = await db.getUserById(authorId);
+  if (!user) {
+    throw new AppError('User not found', 404);
+  }
+  const createdPost = await db.createPostByAuthorId(parsedPost);
+
   sendSuccess(res, createdPost, 201, 'Post created successfully');
 }
 export { getAllPosts, createPost };

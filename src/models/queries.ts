@@ -109,12 +109,12 @@ async function createPostByAuthorId(
 ): Promise<TPost> {
   try {
     // Optional: Validate author exists and is an author
-    const author = await prisma.user.findUnique({
-      where: { id: post.authorId },
-    });
-    if (!author || !author.isAuthor) {
-      throw new ValidationError('Invalid author', 'INVALID_AUTHOR');
-    }
+    // const author = await prisma.user.findUnique({
+    //   where: { id: post.authorId },
+    // });
+    // if (!author || !author.isAuthor) {
+    //   throw new ValidationError('Invalid author', 'INVALID_AUTHOR');
+    // }
     return await prisma.post.create({
       data: {
         title: post.title,
