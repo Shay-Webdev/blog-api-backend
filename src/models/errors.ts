@@ -1,22 +1,33 @@
-class AppError extends Error {
-  statusCode: number;
+export class AppError extends Error {
+  status: number;
   code?: string;
-  constructor(message: string, statusCode: number = 400, code?: string) {
+  constructor(message: string, status: number, code?: string) {
     super(message);
-    this.statusCode = statusCode;
+    this.status = status;
     this.code = code;
   }
 }
 
-class ValidationError extends AppError {
-  constructor(message: string, code?: string) {
-    super(message, 400, code);
+export class DatabaseError extends AppError {
+  constructor(message: string, code: string = 'DATABASE_ERROR') {
+    super(message, 500, code);
   }
 }
 
-class NotFoundError extends AppError {
-  constructor(message: string, code?: string) {
-    super(message, 404, code);
+export class UniqueConstraintError extends DatabaseError {
+  constructor(field: string) {
+    super(`${field} already exists`, 'UNIQUE_CONSTRAINT_FAILED');
   }
 }
-export { AppError, ValidationError, NotFoundError };
+
+export class NotFoundError extends DatabaseError {
+  constructor(entity: string) {
+    super(`${entity} not found`, 'NOT_FOUND');
+  }
+}
+
+export class ValidationError extends AppError {
+  constructor(message: string, code: string = 'VALIDATION_ERROR') {
+    super(message, 400, code);
+  }
+}

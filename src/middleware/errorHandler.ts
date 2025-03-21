@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../models/errors.js';
 import { log } from 'console';
 import { sendError } from '../utils/response.js';
+import { Prisma } from '@prisma/client';
 
 const errorHandler = (
   err: AppError,
@@ -11,15 +12,16 @@ const errorHandler = (
 ) => {
   const error =
     err instanceof AppError ? err : new AppError('Internal server error', 500);
+
   if (process.env.NODE_ENV !== 'production') {
-    console.error(err);
+    console.error('development mode: error', error);
   } else {
     console.error(
-      `[${new Date().toISOString()}] ${error.statusCode} ${error.message}`
+      `[${new Date().toISOString()}] ${error.status} ${error.message}`
     );
   }
 
-  sendError(res, error.message, error.statusCode, error.code);
+  sendError(res, error.message, error.status, error.code);
 };
 
 export { errorHandler };
