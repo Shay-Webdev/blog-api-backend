@@ -5,7 +5,7 @@ const userRoutes = Router();
 
 userRoutes
   .route('/')
-  .get(asyncHandler(userController.getAllUsers))
-  .post(asyncHandler(userController.createUser));
+  .get(userController.getAllUsers)
+  .post(userController.createUser);
 
 export default userRoutes;

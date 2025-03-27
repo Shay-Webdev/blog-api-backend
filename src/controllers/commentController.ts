@@ -3,8 +3,9 @@ import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../models/errors.js';
 import { sendSuccess } from '../utils/response.js';
 import { TComment, TPost, TUser } from '../types/types.js';
+import { asyncHandler } from '../middleware/asyncHandler.js';
 
-async function getAllComments(
+const getAllComments = asyncHandler(async function (
   req: Request<{}, {}, Omit<TUser, 'password'>>,
   res: Response,
   next: NextFunction
@@ -14,9 +15,9 @@ async function getAllComments(
     throw new AppError('No comments found', 404);
   }
   sendSuccess(res, comments, 200, 'Comments fetched successfully');
-}
+});
 
-async function createComment(
+const createComment = asyncHandler(async function (
   req: Request<{}, {}, Pick<TComment, 'content' | 'postId' | 'userId'>>,
   res: Response<TComment>,
   next: NextFunction
@@ -38,5 +39,5 @@ async function createComment(
   }
   const createdComment = await db.createCommentByPostId(parsedComment);
   sendSuccess(res, createdComment, 201, 'Comment created successfully');
-}
+});
 export { getAllComments, createComment };

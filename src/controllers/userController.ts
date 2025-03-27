@@ -14,8 +14,12 @@ import { AppError } from '../models/errors.js';
 import { sendSuccess } from '../utils/response.js';
 import { TUser } from '../types/types.js';
 import bcrypt from 'bcryptjs';
+import { asyncHandler } from '../middleware/asyncHandler.js';
 
-async function getAllUsers(req: Request, res: Response<IUserResponse[]>) {
+const getAllUsers = asyncHandler(async function (
+  req: Request,
+  res: Response<IUserResponse[]>
+) {
   const users = await db.getAllUsers();
   if (!users) {
     throw new AppError('No users found', 404);
@@ -30,9 +34,9 @@ async function getAllUsers(req: Request, res: Response<IUserResponse[]>) {
   });
 
   sendSuccess(res, userDetails, 200, 'Users fetched successfully');
-}
+});
 
-async function createUser(
+const createUser = asyncHandler(async function (
   req: Request<{}, {}, Omit<IUserRequestBody, 'id'>>,
   res: Response,
   next: NextFunction
@@ -55,6 +59,6 @@ async function createUser(
     throw new AppError('User not found', 404);
   }
   sendSuccess(res, createdUser, 201, 'User created successfully');
-}
+});
 
 export { getAllUsers, createUser };

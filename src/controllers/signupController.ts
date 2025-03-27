@@ -6,7 +6,10 @@ import { TUser } from '../types/types.js';
 import bcrypt from 'bcryptjs';
 import { IUserRequestBody } from '../types/request.js';
 import { validationResult } from 'express-validator';
-async function createUser(
+import { asyncHandler } from '../middleware/asyncHandler.js';
+import { signupValidation } from '../validation/signupValidation.js';
+
+const createUserFunction = asyncHandler(async function (
   req: Request<{}, {}, Omit<IUserRequestBody, 'id'>>,
   res: Response,
   next: NextFunction
@@ -38,6 +41,7 @@ async function createUser(
     throw new AppError('User not found', 404);
   }
   sendSuccess(res, createdUser, 201, 'User created successfully');
-}
+});
+const createUser = [signupValidation, createUserFunction];
 
 export { createUser };

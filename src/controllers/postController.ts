@@ -3,8 +3,9 @@ import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../models/errors.js';
 import { sendSuccess } from '../utils/response.js';
 import { TPost, TUser } from '../types/types.js';
+import { asyncHandler } from '../middleware/asyncHandler.js';
 
-async function getAllPosts(
+const getAllPosts = asyncHandler(async function (
   req: Request<{}, {}, Omit<TUser, 'password'>>,
   res: Response,
   next: NextFunction
@@ -15,9 +16,9 @@ async function getAllPosts(
     throw new AppError('No posts found', 404);
   }
   sendSuccess(res, posts, 200, 'Posts fetched successfully');
-}
+});
 
-async function createPost(
+const createPost = asyncHandler(async function (
   req: Request<{}, {}, Pick<TPost, 'title' | 'content' | 'authorId'>>,
   res: Response<TPost>,
   next: NextFunction
@@ -44,5 +45,5 @@ async function createPost(
   const createdPost = await db.createPostByAuthorId(parsedPost);
 
   sendSuccess(res, createdPost, 201, 'Post created successfully');
-}
+});
 export { getAllPosts, createPost };
