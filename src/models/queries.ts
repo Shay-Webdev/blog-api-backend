@@ -49,6 +49,18 @@ async function getUserById(
   }
 }
 
+async function getUserByEmail(email: string): Promise<TUser> {
+  try {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      throw new NotFoundError('User');
+    }
+    return user;
+  } catch (error) {
+    handleDbError(error, 'User');
+  }
+}
+
 async function getPostById(id: number): Promise<TPost> {
   try {
     const post = await prisma.post.findUnique({ where: { id } });
@@ -73,15 +85,14 @@ async function getCommentById(id: number): Promise<TComment> {
   }
 }
 
-async function createUser(
-  user: Pick<TUser, 'username' | 'email' | 'password'>
-): Promise<TUser> {
+async function createUser(user: Omit<TUser, 'id'>): Promise<TUser> {
   try {
     return await prisma.user.create({
       data: {
         username: user.username,
         email: user.email,
         password: user.password,
+        isAuthor: user.isAuthor ? user.isAuthor : false,
       },
     });
   } catch (error) {
@@ -187,6 +198,7 @@ export {
   getAllUsers,
   getAllComments,
   getUserById,
+  getUserByEmail,
   getPostById,
   getCommentById,
   createUser,

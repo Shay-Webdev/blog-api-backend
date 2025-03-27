@@ -5,14 +5,14 @@ interface IPostResponse extends TPost {}
 interface ICommentResponse extends TComment {}
 
 interface SuccessResponse<T> {
-  success: true;
+  status: string;
   data: T;
   message?: string;
   meta?: Record<string, any>;
 }
 
 interface ErrorResponse {
-  success: false;
+  status: string;
   message: string;
   code?: string;
   stack?: string;

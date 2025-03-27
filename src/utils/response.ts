@@ -4,12 +4,12 @@ import { SuccessResponse, ErrorResponse } from '../types/response.js';
 const sendSuccess = <T>(
   res: Response,
   data: T,
-  status: number = 200,
+  statusCode: number = 200,
   message?: string,
-  meta?: Record<string, any>
+  meta?: Record<string, unknown>
 ) => {
-  res.status(status).json({
-    success: true,
+  res.status(statusCode).json({
+    status: 'success',
     data,
     message,
     meta,
@@ -19,11 +19,11 @@ const sendSuccess = <T>(
 const sendError = (
   res: Response,
   message: string,
-  status: number = 500,
+  statusCode: number = 500,
   code?: string
 ) => {
-  res.status(status).json({
-    success: false,
+  res.status(statusCode).json({
+    status: 'error',
     message,
     code,
   } as ErrorResponse);

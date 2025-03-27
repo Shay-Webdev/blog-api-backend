@@ -21,7 +21,7 @@ const errorHandler = (
     );
   }
 
-  sendError(res, error.message, error.status, error.code);
+  sendError(res, error.message, error.statusCode, error.code);
 };
 
 export { errorHandler };

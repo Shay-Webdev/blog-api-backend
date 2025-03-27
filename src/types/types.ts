@@ -13,7 +13,7 @@ type TUser = {
   username: string;
   email: string;
   password: string;
-  isAuthor: boolean;
+  isAuthor: boolean | null;
 };
 
 type TComment = {
