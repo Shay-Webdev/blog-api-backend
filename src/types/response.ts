@@ -1,3 +1,4 @@
+import { AppError } from '../models/errors.js';
 import { TUser, TPost, TComment } from '../types/types.js';
 
 interface IUserResponse extends Omit<TUser, 'password'> {}
@@ -11,16 +12,24 @@ interface SuccessResponse<T> {
   meta?: Record<string, any>;
 }
 
-interface ErrorResponse {
-  status: string;
+interface DevErrorResponse {
+  status: number;
+  message: string;
+  stack?: string;
+  error: AppError;
+  code?: string;
+}
+
+interface ProdErrorResponse {
+  status: number;
   message: string;
   code?: string;
-  stack?: string;
 }
-type ApiResponse<T> = SuccessResponse<T> | ErrorResponse;
+type ApiResponse<T> = SuccessResponse<T> | DevErrorResponse | ProdErrorResponse;
 export {
   SuccessResponse,
-  ErrorResponse,
+  DevErrorResponse,
+  ProdErrorResponse,
   ApiResponse,
   IUserResponse,
   IPostResponse,
