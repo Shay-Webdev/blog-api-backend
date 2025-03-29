@@ -5,29 +5,44 @@ import { sendDevError, sendProdError } from '../utils/response.js';
 import { Prisma } from '@prisma/client';
 
 const errorHandler = (
-  err: AppError,
+  error: AppError,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const error =
-    err instanceof AppError ? err : new AppError('Internal server error', 500);
-
   if (process.env.NODE_ENV == 'development') {
     console.error('development mode: error', error);
-    sendDevError(
-      res,
-      error.message,
-      error.statusCode,
-      error.stack,
-      error,
-      error.code
-    );
+    if (error.isOperational) {
+      sendDevError(
+        res,
+        error.message,
+        error.statusCode,
+        error.stack,
+        error,
+        error.code
+      );
+    } else {
+      res.status(500).json({
+        status: 'error',
+        message: 'Internal Server Error',
+        stack: error.stack,
+        error,
+      });
+    }
   } else if (process.env.NODE_ENV == 'production') {
     console.error(
-      `[${new Date().toISOString()}] ${error.status} ${error.message}`
+      `[${new Date().toISOString()}], status:${error.status}, statusCode:${
+        error.statusCode
+      }, message: ${error.message}`
     );
-    sendProdError(res, error.message, error.statusCode, error.code);
+    if (error.isOperational) {
+      sendProdError(res, error.message, error.statusCode, error.code);
+    } else {
+      res.status(500).json({
+        status: 'error',
+        message: 'Internal Server Error',
+      });
+    }
   }
 };
 

@@ -25,6 +25,7 @@ interface ProdErrorResponse {
   message: string;
   code?: string;
 }
+
 type ApiResponse<T> = SuccessResponse<T> | DevErrorResponse | ProdErrorResponse;
 export {
   SuccessResponse,
