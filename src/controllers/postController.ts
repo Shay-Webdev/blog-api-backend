@@ -13,7 +13,7 @@ const getAllPosts = asyncHandler(async function (
   const userId: number = req.body.id;
   const posts = await db.getAllPosts(userId);
   if (!posts) {
-    throw new AppError('No posts found', 404);
+    throw new AppError('Resource or Route not found', 404, 'not_found');
   }
   sendSuccess(res, posts, 200, 'Posts fetched successfully');
 });
@@ -40,7 +40,7 @@ const createPost = asyncHandler(async function (
   );
   const user = await db.getUserById(authorId);
   if (!user) {
-    throw new AppError('User not found', 404);
+    throw new AppError('Resource or Route not found', 404, 'not_found');
   }
   const createdPost = await db.createPostByAuthorId(parsedPost);
 

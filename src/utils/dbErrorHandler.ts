@@ -17,24 +17,21 @@ export function handleDbError(
       case 'P2025': // Record not found (e.g., update/delete)
         throw new NotFoundError(entity);
       default:
-        throw new DatabaseError(
-          `Database operation failed: ${error.message}`,
-          error.code
-        );
+        throw new DatabaseError(`Prisma error`, 'prisma_error');
     }
   }
-  if (error instanceof Prisma.PrismaClientValidationError) {
-    throw new DatabaseError(
-      `Database operation failed: ${error.message}`,
-      'DATABASE_VALIDATION_ERROR'
-    );
-  }
-  if (error instanceof Prisma.PrismaClientUnknownRequestError) {
-    throw new DatabaseError(
-      `Database operation failed: ${error.message}`,
-      'DATABASE_UNKNOWN_ERROR'
-    );
-  }
+  // if (error instanceof Prisma.PrismaClientValidationError) {
+  //   throw new DatabaseError(
+  //     `Database operation failed: ${error.message}`,
+  //     'DATABASE_VALIDATION_ERROR'
+  //   );
+  // }
+  // if (error instanceof Prisma.PrismaClientUnknownRequestError) {
+  //   throw new DatabaseError(
+  //     `Database operation failed: ${error.message}`,
+  //     'DATABASE_UNKNOWN_ERROR'
+  //   );
+  // }
 
-  throw new DatabaseError(`Unexpected database error: ${error}`);
+  throw new DatabaseError(`Internal server error`, 'internal_server_error');
 }

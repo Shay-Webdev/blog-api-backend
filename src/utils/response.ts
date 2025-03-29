@@ -6,6 +6,7 @@ import {
 } from '../types/response.js';
 import { error } from 'console';
 import { AppError } from '../models/errors.js';
+import { TErrorCode, TErrorMessage, TStatusCode } from '../types/types.js';
 
 const sendSuccess = <T>(
   res: Response,
@@ -24,11 +25,11 @@ const sendSuccess = <T>(
 
 const sendDevError = (
   res: Response,
-  message: string,
-  statusCode: number = 500,
+  message: TErrorMessage,
+  statusCode: TStatusCode = 500,
   stack: string | undefined,
   error: AppError,
-  code?: string
+  code?: TErrorCode
 ) => {
   res.status(statusCode).json({
     status: statusCode,
@@ -40,9 +41,9 @@ const sendDevError = (
 };
 const sendProdError = (
   res: Response,
-  message: string,
-  statusCode: number = 500,
-  code?: string
+  message: TErrorMessage,
+  statusCode: TStatusCode = 500,
+  code?: TErrorCode
 ) => {
   res.status(statusCode).json({
     status: statusCode,

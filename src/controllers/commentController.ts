@@ -12,7 +12,7 @@ const getAllComments = asyncHandler(async function (
 ) {
   const comments = await db.getAllComments();
   if (!comments) {
-    throw new AppError('No comments found', 404);
+    throw new AppError('Resource or Route not found', 404, 'not_found');
   }
   sendSuccess(res, comments, 200, 'Comments fetched successfully');
 });
@@ -31,11 +31,11 @@ const createComment = asyncHandler(async function (
 
   const user = await db.getUserById(parsedComment.userId);
   if (!user) {
-    throw new AppError('User not found', 404);
+    throw new AppError('Resource or Route not found', 404, 'not_found');
   }
   const post = await db.getPostById(parsedComment.postId);
   if (!post) {
-    throw new AppError('Post not found', 404);
+    throw new AppError('Resource or Route not found', 404, 'not_found');
   }
   const createdComment = await db.createCommentByPostId(parsedComment);
   sendSuccess(res, createdComment, 201, 'Comment created successfully');

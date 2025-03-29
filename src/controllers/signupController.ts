@@ -18,6 +18,25 @@ const createUserFunction = asyncHandler(async function (
   // const reqUser = req.body;
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    if (
+      errors.array()[0].msg === 'Username is required' ||
+      'Email already exists' ||
+      'Password is required'
+    ) {
+      throw new AppError('Missing input', 400, 'missing_field');
+    } else if (
+      errors.array()[0].msg === 'Password must be at least 8 characters long' ||
+      'Name must be at least 3 characters long' ||
+      'Email is required'
+    ) {
+      throw new AppError('Invalid input', 400, 'invalid_field');
+    } else if (errors.array()[0].msg === 'Email already exists') {
+      throw new AppError(
+        'Resource trying to create already exists',
+        400,
+        'duplicate_resource'
+      );
+    }
     throw new AppError(errors.array()[0].msg, 400);
   }
   console.log('req body in createUser/signup', req.body);

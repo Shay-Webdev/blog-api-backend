@@ -39,12 +39,16 @@ const errorCode = {
     `invalid_field`,
     `payload_too_large`,
   ],
+
   resource_errors: [
     `not_found`,
     `duplicate_user`,
+    'duplicate_resource',
     `conflict`,
     `method_not_allowed`,
+    `prisma_error`,
   ],
+
   file_errors: [`upload_failed`, `file_not_found`, `file_too_large`],
   server_errors: [`internal_server_error`, `service_unavailable`],
 } as const;
@@ -66,9 +70,10 @@ const errorMessages = {
   ],
   resource_errors: [
     'Resource or Route not found',
-    'User already exists',
+    'Resource trying to create already exists',
     'Conflict occurred',
     'Method not allowed',
+    `Prisma error`,
   ],
   file_errors: [
     'File upload failed',
