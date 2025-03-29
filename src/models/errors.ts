@@ -23,8 +23,8 @@ export class AppError extends Error {
 }
 
 export class DatabaseError extends AppError {
-  constructor(message: TErrorMessage, code: TErrorCode) {
-    super(message, 500, code);
+  constructor(message: TErrorMessage, code: TErrorCode, errorSource?: unknown) {
+    super(message, 500, code, errorSource);
   }
 }
 
@@ -35,7 +35,7 @@ export class UniqueConstraintError extends DatabaseError {
 }
 
 export class NotFoundError extends DatabaseError {
-  constructor(entity: string) {
+  constructor() {
     super(`Resource or Route not found`, 'not_found');
   }
 }
@@ -49,8 +49,9 @@ export class ValidationError extends AppError {
       | 'Invalid input'
       | 'Request too large'
     >,
-    code: TErrorCode
+    code: TErrorCode,
+    errorSource?: unknown
   ) {
-    super(message, 400, code);
+    super(message, 400, code, errorSource);
   }
 }

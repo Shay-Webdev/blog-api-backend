@@ -41,7 +41,7 @@ async function getUserById(
   try {
     const user = await prisma.user.findUnique({ where: { id } });
     if (!user) {
-      throw new NotFoundError('User');
+      throw new NotFoundError();
     }
     return user;
   } catch (error) {
@@ -49,12 +49,12 @@ async function getUserById(
   }
 }
 
-async function getUserByEmail(email: string): Promise<TUser> {
+async function getUserByEmail(email: string) {
   try {
     const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) {
-      throw new NotFoundError('User');
-    }
+    // if (!user) {
+    //   throw new NotFoundError();
+    // }
     return user;
   } catch (error) {
     handleDbError(error, 'User');
@@ -65,7 +65,7 @@ async function getPostById(id: number): Promise<TPost> {
   try {
     const post = await prisma.post.findUnique({ where: { id } });
     if (!post) {
-      throw new NotFoundError('Post');
+      throw new NotFoundError();
     }
     return post;
   } catch (error) {
@@ -77,7 +77,7 @@ async function getCommentById(id: number): Promise<TComment> {
   try {
     const comment = await prisma.comment.findUnique({ where: { id } });
     if (!comment) {
-      throw new NotFoundError('Comment');
+      throw new NotFoundError();
     }
     return comment;
   } catch (error) {
@@ -104,7 +104,7 @@ async function makeAuthor(userId: number): Promise<TUser> {
   try {
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
-      throw new NotFoundError('User');
+      throw new NotFoundError();
     }
     return await prisma.user.update({
       where: { id: userId },
@@ -142,7 +142,7 @@ async function uploadPostById(postId: number): Promise<TPost> {
   try {
     const post = await prisma.post.findUnique({ where: { id: postId } });
     if (!post) {
-      throw new NotFoundError('Post');
+      throw new NotFoundError();
     }
     return await prisma.post.update({
       where: { id: postId },
@@ -162,7 +162,7 @@ async function createCommentByPostId(
       where: { id: comment.postId },
     });
     if (!post) {
-      throw new NotFoundError('Post');
+      throw new NotFoundError();
     }
     return await prisma.comment.create({
       data: {
@@ -182,7 +182,7 @@ async function postCommentById(commentId: number): Promise<TComment> {
       where: { id: commentId },
     });
     if (!comment) {
-      throw new NotFoundError('Comment');
+      throw new NotFoundError();
     }
     return await prisma.comment.update({
       where: { id: commentId },

@@ -15,7 +15,7 @@ export function handleDbError(
         const field = (error.meta?.target as string[])?.[0] || 'field';
         throw new UniqueConstraintError(field);
       case 'P2025': // Record not found (e.g., update/delete)
-        throw new NotFoundError(entity);
+        throw new NotFoundError();
       default:
         throw new DatabaseError(`Prisma error`, 'prisma_error');
     }
@@ -32,6 +32,11 @@ export function handleDbError(
   //     'DATABASE_UNKNOWN_ERROR'
   //   );
   // }
+  console.log('instance of db Error in handleDbError:', error);
 
-  throw new DatabaseError(`Internal server error`, 'internal_server_error');
+  throw new DatabaseError(
+    `Internal server error`,
+    'internal_server_error',
+    error
+  );
 }

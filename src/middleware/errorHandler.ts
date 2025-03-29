@@ -26,7 +26,7 @@ const errorHandler = (
     } else {
       res.status(500).json({
         status: 'error',
-        message: 'Internal Server Error',
+        message: 'Internal Server Error: Something went wrong',
         stack: error.stack,
         error,
         code: error.code,

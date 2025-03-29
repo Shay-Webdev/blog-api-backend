@@ -48,24 +48,25 @@ const createUserFunction = asyncHandler(async function (
       'Internal server error',
       500,
       'internal_server_error',
-      errors.array()[0].msg
+      errors.array()
     );
+  } else {
+    console.log('req body in createUser/signup', req.body);
+    console.log('req query in createUser/signup', req.query);
+    console.log('req params in createUser/signup', req.params);
+
+    const parsedUser: Omit<TUser, 'id'> = {
+      username: req.body.username,
+      email: req.body.email,
+      password: bcrypt.hashSync(req.body.password, 10),
+      isAuthor: req.body.isAuthor === 'true' ? true : false,
+    };
+
+    const createdUser = await db.createUser(parsedUser);
+    console.log('createdUser in signup', createdUser);
+
+    sendSuccess(res, createdUser, 201, 'User created successfully');
   }
-  console.log('req body in createUser/signup', req.body);
-  console.log('req query in createUser/signup', req.query);
-  console.log('req params in createUser/signup', req.params);
-
-  const parsedUser: Omit<TUser, 'id'> = {
-    username: req.body.username,
-    email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 10),
-    isAuthor: req.body.isAuthor === 'true' ? true : false,
-  };
-
-  const createdUser = await db.createUser(parsedUser);
-  console.log('createdUser in signup', createdUser);
-
-  sendSuccess(res, createdUser, 201, 'User created successfully');
 });
 const createUser = [signupValidation, createUserFunction];
 
