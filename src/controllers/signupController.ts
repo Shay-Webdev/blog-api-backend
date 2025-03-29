@@ -18,23 +18,24 @@ const createUserFunction = asyncHandler(async function (
   // const reqUser = req.body;
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    const errorMessages = errors.array().map((error) => error.msg);
     console.log(`errors in  createUser validation`, errors.array());
 
     if (
-      errors.array()[0].msg === 'Username is required' ||
-      'Email is required' ||
-      'Password is required'
+      errorMessages.includes('Username is required') ||
+      errorMessages.includes('Email is required') ||
+      errorMessages.includes('Password is required')
     ) {
       console.log('errors in  createUser validation/missing input');
 
       throw new AppError('Missing input', 400, 'missing_field', errors.array());
     } else if (
-      errors.array()[0].msg === 'Password must be at least 8 characters long' ||
-      'Name must be at least 3 characters long'
+      errorMessages.includes('Password must be at least 8 characters long') ||
+      errorMessages.includes('Name must be at least 3 characters long')
     ) {
       console.log('errors in  createUser validation/invalid input');
       throw new AppError('Invalid input', 400, 'invalid_field', errors.array());
-    } else if (errors.array()[0].msg === 'Email already exists') {
+    } else if (errorMessages.includes('Email already exists')) {
       console.log('errors in  createUser validation/duplicate resource');
       throw new AppError(
         'Resource trying to create already exists',
