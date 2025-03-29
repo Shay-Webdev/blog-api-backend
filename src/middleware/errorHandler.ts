@@ -3,6 +3,7 @@ import { AppError } from '../models/errors.js';
 import { log } from 'console';
 import { sendDevError, sendProdError } from '../utils/response.js';
 import { Prisma } from '@prisma/client';
+import { TErrorMessage } from '../types/types.js';
 
 const errorHandler = (
   error: AppError,
@@ -15,7 +16,7 @@ const errorHandler = (
     if (error.isOperational) {
       sendDevError(
         res,
-        error.message,
+        error.message as TErrorMessage,
         error.statusCode,
         error.stack,
         error,
@@ -36,7 +37,12 @@ const errorHandler = (
       }, message: ${error.message}`
     );
     if (error.isOperational) {
-      sendProdError(res, error.message, error.statusCode, error.code);
+      sendProdError(
+        res,
+        error.message as TErrorMessage,
+        error.statusCode,
+        error.code
+      );
     } else {
       res.status(500).json({
         status: 'error',

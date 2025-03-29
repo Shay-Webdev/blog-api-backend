@@ -60,12 +60,12 @@ const errorMessages = {
   ],
   validation_errors: [
     'Invalid request body',
-    'Invalid input',
+    'Missing input',
     'Invalid input',
     'Request too large',
   ],
   resource_errors: [
-    'Resource not found',
+    'Resource or Route not found',
     'User already exists',
     'Conflict occurred',
     'Method not allowed',

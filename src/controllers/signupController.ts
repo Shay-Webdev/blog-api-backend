@@ -31,15 +31,9 @@ const createUserFunction = asyncHandler(async function (
     isAuthor: req.body.isAuthor === 'true' ? true : false,
   };
 
-  const createdUser = parsedUser;
+  const createdUser = await db.createUser(parsedUser);
   console.log('createdUser in signup', createdUser);
 
-  // const createdUser = await db.createUser(parsedUser);
-  // console.log('createdUser in signup', createdUser);
-
-  if (!createdUser) {
-    throw new AppError('User not found', 404);
-  }
   sendSuccess(res, createdUser, 201, 'User created successfully');
 });
 const createUser = [signupValidation, createUserFunction];

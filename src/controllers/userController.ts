@@ -21,9 +21,7 @@ const getAllUsers = asyncHandler(async function (
   res: Response<IUserResponse[]>
 ) {
   const users = await db.getAllUsers();
-  if (!users) {
-    throw new AppError('No users found', 404);
-  }
+
   const userDetails = users.map((user) => {
     return {
       id: user.id,
@@ -55,9 +53,6 @@ const createUser = asyncHandler(async function (
   const createdUser = await db.createUser(parsedUser);
   console.log('createdUser in signup', createdUser);
 
-  if (!createdUser) {
-    throw new AppError('User not found', 404);
-  }
   sendSuccess(res, createdUser, 201, 'User created successfully');
 });
 
