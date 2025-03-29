@@ -24,6 +24,7 @@ interface DevErrorResponse {
   message: TErrorMessage;
   stack?: string;
   error: AppError;
+  errorSource?: unknown;
   code?: TErrorCode;
 }
 

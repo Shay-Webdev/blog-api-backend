@@ -5,16 +5,19 @@ export class AppError extends Error {
   status: string;
   code?: TErrorCode;
   isOperational: boolean;
+  errorSource?: unknown;
   constructor(
     message: TErrorMessage,
     statusCode: TStatusCode,
-    code?: TErrorCode
+    code?: TErrorCode,
+    errorSource?: unknown
   ) {
     super(message);
     this.statusCode = statusCode;
     this.status = statusCode >= 400 && statusCode < 500 ? 'fail' : 'error';
     this.code = code;
     this.isOperational = true;
+    this.errorSource = errorSource;
     Error.captureStackTrace(this, this.constructor);
   }
 }

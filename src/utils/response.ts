@@ -29,7 +29,8 @@ const sendDevError = (
   statusCode: TStatusCode = 500,
   stack: string | undefined,
   error: AppError,
-  code?: TErrorCode
+  code?: TErrorCode,
+  errorSource?: unknown
 ) => {
   res.status(statusCode).json({
     status: statusCode,
@@ -37,6 +38,7 @@ const sendDevError = (
     stack,
     error,
     code,
+    errorSource,
   } as DevErrorResponse);
 };
 const sendProdError = (

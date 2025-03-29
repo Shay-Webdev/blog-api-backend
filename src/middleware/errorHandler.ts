@@ -20,7 +20,8 @@ const errorHandler = (
         error.statusCode,
         error.stack,
         error,
-        error.code
+        error.code,
+        error.errorSource
       );
     } else {
       res.status(500).json({
@@ -28,6 +29,8 @@ const errorHandler = (
         message: 'Internal Server Error',
         stack: error.stack,
         error,
+        code: error.code,
+        errorSource: error.errorSource,
       });
     }
   } else if (process.env.NODE_ENV == 'production') {

@@ -18,26 +18,37 @@ const createUserFunction = asyncHandler(async function (
   // const reqUser = req.body;
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    console.log(`errors in  createUser validation`, errors.array());
+
     if (
       errors.array()[0].msg === 'Username is required' ||
-      'Email already exists' ||
+      'Email is required' ||
       'Password is required'
     ) {
-      throw new AppError('Missing input', 400, 'missing_field');
+      console.log('errors in  createUser validation/missing input');
+
+      throw new AppError('Missing input', 400, 'missing_field', errors.array());
     } else if (
       errors.array()[0].msg === 'Password must be at least 8 characters long' ||
-      'Name must be at least 3 characters long' ||
-      'Email is required'
+      'Name must be at least 3 characters long'
     ) {
-      throw new AppError('Invalid input', 400, 'invalid_field');
+      console.log('errors in  createUser validation/invalid input');
+      throw new AppError('Invalid input', 400, 'invalid_field', errors.array());
     } else if (errors.array()[0].msg === 'Email already exists') {
+      console.log('errors in  createUser validation/duplicate resource');
       throw new AppError(
         'Resource trying to create already exists',
-        400,
-        'duplicate_resource'
+        409,
+        'duplicate_resource',
+        errors.array()
       );
     }
-    throw new AppError(errors.array()[0].msg, 400);
+    throw new AppError(
+      'Internal server error',
+      500,
+      'internal_server_error',
+      errors.array()[0].msg
+    );
   }
   console.log('req body in createUser/signup', req.body);
   console.log('req query in createUser/signup', req.query);
