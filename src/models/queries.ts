@@ -35,14 +35,10 @@ async function getAllComments(): Promise<TComment[]> {
   }
 }
 
-async function getUserById(
-  id: number
-): Promise<Omit<TUser, 'posts' | 'comments'>> {
+async function getUserById(id: number) {
   try {
     const user = await prisma.user.findUnique({ where: { id } });
-    if (!user) {
-      throw new NotFoundError();
-    }
+
     return user;
   } catch (error) {
     handleDbError(error, 'User');
@@ -61,24 +57,20 @@ async function getUserByEmail(email: string) {
   }
 }
 
-async function getPostById(id: number): Promise<TPost> {
+async function getPostById(id: number) {
   try {
     const post = await prisma.post.findUnique({ where: { id } });
-    if (!post) {
-      throw new NotFoundError();
-    }
+
     return post;
   } catch (error) {
     handleDbError(error, 'Post');
   }
 }
 
-async function getCommentById(id: number): Promise<TComment> {
+async function getCommentById(id: number) {
   try {
     const comment = await prisma.comment.findUnique({ where: { id } });
-    if (!comment) {
-      throw new NotFoundError();
-    }
+
     return comment;
   } catch (error) {
     handleDbError(error, 'Comment');
