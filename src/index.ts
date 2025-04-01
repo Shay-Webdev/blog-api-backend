@@ -3,11 +3,12 @@ import('dotenv/config');
 import indexRoute from './routes/index.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { AppError } from './models/errors.js';
+import configurePassport from './authentication/loginAuth.js';
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+configurePassport(app);
 app.use('/', indexRoute);
 app.all('*', (req: Request, res: Response) => {
   throw new AppError(`Resource or Route not found`, 404);

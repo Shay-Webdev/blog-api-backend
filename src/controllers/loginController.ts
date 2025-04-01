@@ -4,9 +4,11 @@ import { sendSuccess } from '../utils/response.js';
 import { loginValidation } from '../validation/loginValidation.js';
 import { validationResult } from 'express-validator';
 import { AppError } from '../models/errors.js';
+import passport from 'passport';
 
 const loginUser = [
   loginValidation,
+  passport.authenticate('local'),
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     const errorMessages = errors.array().map((error) => error.msg);
