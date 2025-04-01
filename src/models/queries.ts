@@ -47,7 +47,7 @@ async function getUserById(id: number) {
 
 async function getUserByEmail(email: string) {
   try {
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = (await prisma.user.findUnique({ where: { email } })) as TUser;
     // if (!user) {
     //   throw new NotFoundError();
     // }
