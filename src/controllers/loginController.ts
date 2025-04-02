@@ -5,11 +5,13 @@ import { loginValidation } from '../validation/loginValidation.js';
 import { validationResult } from 'express-validator';
 import { AppError } from '../models/errors.js';
 import passport from 'passport';
+import { customAuthError } from '../authentication/customAuthError.js';
+import { IReqUser } from '../types/request.js';
 
 const loginUser = [
   loginValidation,
-  passport.authenticate('local'),
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+
+  asyncHandler(async (req: IReqUser, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     const errorMessages = errors.array().map((error) => error.msg);
     if (!errors.isEmpty()) {
@@ -36,8 +38,13 @@ const loginUser = [
       }
     }
     console.log('req user in login', req.user);
-
-    res.status(200).json({ message: 'Login successful', user: req.body });
+    next();
+  }),
+  customAuthError,
+  asyncHandler(async (req: IReqUser, res: Response) => {
+    // Wrap in asyncHandler
+    console.log('req.user in login:', req.user);
+    sendSuccess(res, req.user, 200, 'Login successful');
   }),
 ];
 

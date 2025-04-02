@@ -1,4 +1,5 @@
 import { TUser, TPost, TComment } from './types.js';
+import { Request } from 'express';
 
 interface IUserRequestBody extends Omit<TUser, 'id' | 'isAuthor'> {
   id: string;

@@ -5,6 +5,7 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import { TErrorMessage, TUser } from '../types/types.js';
 import { IReqUser, IUser } from '../types/request.js';
 import { Application } from 'express';
+import { error } from 'console';
 
 const configurePassport = (app: Application) => {
   passport.use(
@@ -17,6 +18,8 @@ const configurePassport = (app: Application) => {
         try {
           const user = await db.getUserByEmail(email);
           if (!user) {
+            console.error('user not found in localStrategy:');
+
             return done(null, false, {
               message: 'Resource or Route not found' as TErrorMessage,
             });
@@ -25,12 +28,16 @@ const configurePassport = (app: Application) => {
             if (isMatch) {
               return done(null, user);
             } else {
+              console.error('invalid credentials in localStrategy:');
+
               return done(null, false, {
                 message: 'Invalid credentials' as TErrorMessage,
               });
             }
           }
         } catch (err) {
+          console.error('error in localStrategy:');
+
           return done(err);
         }
       }

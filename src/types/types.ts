@@ -16,6 +16,10 @@ type TUser = {
   isAuthor: boolean | null;
 };
 
+declare module 'passport' {
+  interface User extends TUser {}
+}
+
 type TComment = {
   id: number;
   content: string;
