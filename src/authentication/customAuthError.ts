@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import passport, { authenticate } from 'passport';
-import { TUser } from '../types/types.js';
+import { TErrorMessage, TUser } from '../types/types.js';
 import { IReqUser } from '../types/request.js';
+import { AppError } from '../models/errors.js';
 
 const customAuthError = (req: Request, res: Response, next: NextFunction) => {
   passport.authenticate(
@@ -11,10 +12,15 @@ const customAuthError = (req: Request, res: Response, next: NextFunction) => {
         return next(err);
       }
       if (info) {
-        return res.status(401).json({ message: info.message });
+        throw new AppError(
+          info.message as TErrorMessage,
+          401,
+          'auth_failed',
+          info
+        ); // return res.status(401).json({ message: info.message });
       }
       if (!user) {
-        return res.status(401).json({ message: 'Unauthorized' });
+        throw new AppError('Access denied', 401, 'auth_failed'); // return res.status(401).json({ message: 'Unauthorized' });
       }
       req.user = user;
     }
