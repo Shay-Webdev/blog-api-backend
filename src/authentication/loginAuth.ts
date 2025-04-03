@@ -28,17 +28,18 @@ const jwtVerifyFunction: VerifyCallback = async (
   done
 ) => {
   try {
-    const user = await db.getUserById(Number(payload.sub));
+    // const user = await db.getUserById(Number(payload.sub));
 
-    if (user) {
-      console.error('user found in jwtVerifyFunction:', user);
-      return done(null, user);
-    } else {
-      console.error('user not found in jwtVerifyFunction:', user);
-      return done(null, false, {
-        message: 'Resource or Route not found' as TErrorMessage,
-      });
-    }
+    // if (user) {
+    //   console.error('user found in jwtVerifyFunction:', user);
+    //   return done(null, user);
+    // } else {
+    //   console.error('user not found in jwtVerifyFunction:', user);
+    //   return done(null, false, {
+    //     message: 'Resource or Route not found' as TErrorMessage,
+    //   });
+    // }
+    return done(null, payload);
   } catch (err) {
     console.error('error in jwtVerifyFunction:', err);
 

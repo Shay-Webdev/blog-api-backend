@@ -14,7 +14,7 @@ const generateToken = (user: IJwtPayload) => {
   const secret = process.env.JWT_SECRET as string;
   const options: jwt.SignOptions = {
     algorithm: process.env.JWT_ALGORITHM as Algorithm,
-    expiresIn: '30s',
+    expiresIn: '1m',
   };
   const token = jwt.sign(payload, secret, options);
   return token;

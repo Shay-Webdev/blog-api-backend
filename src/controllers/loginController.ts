@@ -5,7 +5,7 @@ import { loginValidation } from '../validation/loginValidation.js';
 import { validationResult } from 'express-validator';
 import { AppError } from '../models/errors.js';
 import passport from 'passport';
-import { customAuthError } from '../authentication/customAuthError.js';
+import { customLocalAuth } from '../authentication/customAuthError.js';
 import { IReqUser } from '../types/request.js';
 import { IJwtPayload } from '../types/types.js';
 import { generateKey } from 'crypto';
@@ -43,7 +43,7 @@ const loginUser = [
     console.log('req user in login', req.user);
     next();
   }),
-  customAuthError,
+  customLocalAuth,
   asyncHandler(async (req: IReqUser, res: Response) => {
     const token = await generateToken(req.user as IJwtPayload);
     if (!token) {
@@ -51,7 +51,7 @@ const loginUser = [
         'Internal server error',
         500,
         'internal_server_error',
-        token
+        { token, error: 'token sign failed' }
       );
     }
     console.log('req.user in login:', req.user);

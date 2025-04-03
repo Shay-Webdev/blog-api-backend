@@ -4,7 +4,7 @@ import { TErrorMessage, TUser } from '../types/types.js';
 import { IReqUser } from '../types/request.js';
 import { AppError } from '../models/errors.js';
 
-const customAuthError = (req: Request, res: Response, next: NextFunction) => {
+const customLocalAuth = (req: Request, res: Response, next: NextFunction) => {
   passport.authenticate(
     'local',
     (err: unknown, user: TUser | false, info: Record<string, unknown>) => {
@@ -28,4 +28,4 @@ const customAuthError = (req: Request, res: Response, next: NextFunction) => {
   )(req, res, next);
 };
 
-export { customAuthError };
+export { customLocalAuth };
