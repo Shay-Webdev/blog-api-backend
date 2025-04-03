@@ -6,11 +6,9 @@ import { NotFoundError, ValidationError } from './errors.js';
 
 const prisma = new PrismaClient();
 
-async function getAllPosts(userId: number): Promise<TPost[]> {
+async function getAllPosts(): Promise<TPost[]> {
   try {
-    const posts = await prisma.post.findMany({
-      where: { authorId: userId },
-    });
+    const posts = await prisma.post.findMany({});
     return posts; // Empty array is fine if no posts exist
   } catch (error) {
     handleDbError(error, 'Posts');
@@ -184,7 +182,115 @@ async function postCommentById(commentId: number): Promise<TComment> {
     handleDbError(error, 'Comment');
   }
 }
+// updates
 
+const updateCommentById = async (
+  commentReq: Pick<TComment, 'content' | 'id'>
+) => {
+  try {
+    const comment = await prisma.comment.findUnique({
+      where: { id: commentReq.id },
+    });
+    if (!comment) {
+      throw new NotFoundError();
+    }
+    return await prisma.comment.update({
+      where: { id: commentReq.id },
+      data: { content: comment.content },
+    });
+  } catch (error) {
+    handleDbError(error, 'Comment');
+  }
+};
+
+const updatePostById = async (
+  postReq: Pick<TPost, 'title' | 'content' | 'id'>
+) => {
+  try {
+    const post = await prisma.post.findUnique({
+      where: { id: postReq.id },
+    });
+    if (!post) {
+      throw new NotFoundError();
+    }
+    return await prisma.post.update({
+      where: { id: postReq.id },
+      data: { title: post.title, content: post.content },
+    });
+  } catch (error) {
+    handleDbError(error, 'Post');
+  }
+};
+
+// deletes
+
+const deleteCommentById = async (commentId: number) => {
+  try {
+    const comment = await prisma.comment.findUnique({
+      where: { id: commentId },
+    });
+    if (!comment) {
+      throw new NotFoundError();
+    }
+    return await prisma.comment.delete({
+      where: { id: commentId },
+    });
+  } catch (error) {
+    handleDbError(error, 'Comment');
+  }
+};
+
+const deletePostById = async (postId: number) => {
+  try {
+    const post = await prisma.post.findUnique({
+      where: { id: postId },
+    });
+    if (!post) {
+      throw new NotFoundError();
+    }
+    return await prisma.post.delete({
+      where: { id: postId },
+    });
+  } catch (error) {
+    handleDbError(error, 'Post');
+  }
+};
+
+// all details
+
+const getDetailsByUserId = async (userId: number) => {
+  try {
+    return await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        posts: true,
+        comments: true,
+      },
+    });
+  } catch (error) {
+    handleDbError(error, 'User');
+  }
+};
+
+const getAllCommentsByUserId = async (userId: number) => {
+  try {
+    return await prisma.comment.findMany({
+      where: { userId },
+    });
+  } catch (error) {
+    handleDbError(error, 'Comment');
+  }
+};
+
+const getAllPostsByUserId = async (userId: number) => {
+  try {
+    return await prisma.post.findMany({
+      where: { authorId: userId },
+    });
+  } catch (error) {
+    handleDbError(error, 'Post');
+  }
+};
 export {
   getAllPosts,
   getAllUsers,
@@ -199,4 +305,11 @@ export {
   makeAuthor,
   uploadPostById,
   postCommentById,
+  updateCommentById,
+  updatePostById,
+  deleteCommentById,
+  deletePostById,
+  getDetailsByUserId,
+  getAllCommentsByUserId,
+  getAllPostsByUserId,
 };

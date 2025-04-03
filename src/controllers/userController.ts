@@ -9,6 +9,7 @@ import {
   IUserRequestBody,
   IPostRequestBody,
   ICommentRequestBody,
+  IReqUser,
 } from '../types/request.js';
 import { AppError } from '../models/errors.js';
 import { sendSuccess } from '../utils/response.js';
@@ -17,9 +18,12 @@ import bcrypt from 'bcryptjs';
 import { asyncHandler } from '../middleware/asyncHandler.js';
 
 const getAllUsers = asyncHandler(async function (
-  req: Request,
+  req: IReqUser,
   res: Response<IUserResponse[]>
 ) {
+  if (!req.user) {
+    throw new AppError('Authentication required', 401, 'unauthorized');
+  }
   const users = await db.getAllUsers();
 
   const userDetails = users.map((user) => {
@@ -32,6 +36,52 @@ const getAllUsers = asyncHandler(async function (
   });
 
   sendSuccess(res, userDetails, 200, 'Users fetched successfully');
+});
+
+const getUserDetails = asyncHandler(async function (
+  req: IReqUser,
+  res: Response,
+  next: NextFunction
+) {
+  if (!req.user) {
+    throw new AppError('Authentication required', 401, 'unauthorized');
+  }
+  const userId: number = Number(req.params.userId);
+  const userDetails = await db.getDetailsByUserId(userId);
+  if (!userDetails) {
+    throw new AppError('Resource or Route not found', 404, 'not_found');
+  }
+  const user = {
+    id: userDetails.id,
+    username: userDetails.username,
+    email: userDetails.email,
+    isAuthor: userDetails.isAuthor,
+    posts: userDetails.posts,
+    comments: userDetails.comments,
+  };
+  sendSuccess(res, user, 200, 'User fetched successfully');
+});
+
+const getUserById = asyncHandler(async function (
+  req: IReqUser,
+  res: Response,
+  next: NextFunction
+) {
+  if (!req.user) {
+    throw new AppError('Authentication required', 401, 'unauthorized');
+  }
+  const userId: number = Number(req.params.userId);
+  const user = await db.getUserById(userId);
+  if (!user) {
+    throw new AppError('Resource or Route not found', 404, 'not_found');
+  }
+  const parsedUser = {
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    isAuthor: user.isAuthor,
+  };
+  sendSuccess(res, parsedUser, 200, 'User fetched successfully');
 });
 
 const createUser = asyncHandler(async function (
@@ -56,4 +106,20 @@ const createUser = asyncHandler(async function (
   sendSuccess(res, createdUser, 201, 'User created successfully');
 });
 
-export { getAllUsers, createUser };
+const updateUser = asyncHandler(async function (
+  req: IReqUser,
+  res: Response,
+  next: NextFunction
+) {
+  if (!req.user) {
+    throw new AppError('Authentication required', 401, 'unauthorized');
+  }
+  const userId: number = Number(req.user.id);
+  const updatedUser = await db.makeAuthor(userId);
+  if (!updatedUser) {
+    throw new AppError('Resource or Route not found', 404, 'not_found');
+  }
+  sendSuccess(res, updatedUser, 200, 'User updated successfully');
+});
+
+export { getAllUsers, createUser, getUserDetails, getUserById, updateUser };

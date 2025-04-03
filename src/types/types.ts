@@ -37,6 +37,7 @@ const errorCode = {
     `token_missing`,
     `token_invalid`,
     `access_denied`,
+    `unauthorized`,
   ],
   validation_errors: [
     `invalid_json`,

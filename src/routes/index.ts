@@ -8,7 +8,7 @@ const router = Router();
 
 router.use('/posts', postRoutes);
 router.use('/users', userRoutes);
-router.use('/comments', commentRoutes);
+router.use('/posts/:postId/comments', commentRoutes);
 router.use('/signup', signupRoute);
 router.use('/login', loginRoute);
 export default router;
