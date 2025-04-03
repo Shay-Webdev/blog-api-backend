@@ -23,6 +23,7 @@ const customAuthError = (req: Request, res: Response, next: NextFunction) => {
         throw new AppError('Access denied', 401, 'auth_failed'); // return res.status(401).json({ message: 'Unauthorized' });
       }
       req.user = user;
+      next();
     }
   )(req, res, next);
 };

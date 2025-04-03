@@ -1,3 +1,4 @@
+import { JwtPayload } from 'jsonwebtoken';
 type TPost = {
   id: number;
   title: string;
@@ -99,4 +100,16 @@ const statusCode = {
 
 type TStatusCode = (typeof statusCode)[keyof typeof statusCode][number];
 
-export { TPost, TComment, TUser, TErrorCode, TErrorMessage, TStatusCode };
+interface IJwtPayload
+  extends Pick<TUser, 'email' | 'username' | 'isAuthor'>,
+    JwtPayload {}
+
+export {
+  TPost,
+  TComment,
+  TUser,
+  TErrorCode,
+  TErrorMessage,
+  TStatusCode,
+  IJwtPayload,
+};

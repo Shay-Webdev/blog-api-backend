@@ -7,6 +7,9 @@ import { AppError } from '../models/errors.js';
 import passport from 'passport';
 import { customAuthError } from '../authentication/customAuthError.js';
 import { IReqUser } from '../types/request.js';
+import { IJwtPayload } from '../types/types.js';
+import { generateKey } from 'crypto';
+import { generateToken } from '../utils/jwt.js';
 
 const loginUser = [
   loginValidation,
@@ -42,9 +45,20 @@ const loginUser = [
   }),
   customAuthError,
   asyncHandler(async (req: IReqUser, res: Response) => {
-    // Wrap in asyncHandler
+    const token = await generateToken(req.user as IJwtPayload);
+    if (!token) {
+      throw new AppError(
+        'Internal server error',
+        500,
+        'internal_server_error',
+        token
+      );
+    }
     console.log('req.user in login:', req.user);
-    sendSuccess(res, req.user, 200, 'Login successful');
+    console.log('token in login:', token);
+    // send token to user?
+    // res.status(200).json({ user: req.user, token });
+    sendSuccess(res, { user: req.user, token }, 200, 'Login successful');
   }),
 ];
 

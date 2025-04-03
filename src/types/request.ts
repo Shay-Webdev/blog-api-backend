@@ -1,5 +1,7 @@
+import { Payload } from '@prisma/client/runtime/library';
 import { TUser, TPost, TComment } from './types.js';
 import { Request } from 'express';
+import { IJwtPayload } from './types.js';
 
 interface IUserRequestBody extends Omit<TUser, 'id' | 'isAuthor'> {
   id: string;
@@ -9,7 +11,7 @@ interface ILoginReqUser {
   user?: Pick<TUser, 'email' | 'password'>;
 }
 interface IReqUser extends Request {
-  user?: TUser;
+  user?: TUser | IJwtPayload;
 }
 interface IUser extends Partial<TUser> {}
 interface IPostRequestBody extends TPost {}

@@ -62,6 +62,12 @@ cat ./prisma/ca.pem | base64 -w 0
 npm install --save-dev typescript @types/node @types/express @types/express-session @types/passport @types/passport-local @types/multer @types/cloudinary @types/bcryptjs @types/connect-flash @types/connect-pg-simple
 npx tsc --init # If tsconfig.json is missing
 
+# install & setup passport-jwt for authentication
+
+npm install passport-jwt @types/passport-jwt -- verify jwt
+openssl rand -base64 64 -- secret key
+npm i jsonwebtoken @types/jsonwebtoken -- sign jwt
+
 # tsconfig.json configuration
 
 --tsconfig bases
