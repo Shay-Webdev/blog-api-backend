@@ -4,9 +4,9 @@ import { TUser, IJwtPayload } from '../types/types.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const generateToken = (user: TUser) => {
+const generateToken = (user: IJwtPayload) => {
   const payload: IJwtPayload = {
-    sub: user.id.toString(),
+    sub: user.id,
     email: user.email,
     username: user.username,
     isAuthor: user.isAuthor,

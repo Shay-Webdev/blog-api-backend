@@ -48,6 +48,14 @@ const loginUser = [
         );
       }
     }
+    const userEmail = req.body.email;
+    console.log('user body in login controller: ', req.body);
+    const existingTokens = await db.getTokenByEmail(userEmail);
+    if (existingTokens.length > 0) {
+      throw new AppError('Conflict occurred', 409, 'conflict', {
+        error: 'user already logged in /existing tokens in login controller',
+      });
+    }
     console.log('req user in login pre local auth', req.user);
     next();
   }),

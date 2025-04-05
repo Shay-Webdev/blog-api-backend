@@ -319,6 +319,20 @@ const getRefreshToken = async (refreshToken: string) => {
   }
 };
 
+const getTokenByEmail = async (email: string) => {
+  try {
+    return await prisma.refreshTokens.findMany({
+      where: {
+        user: {
+          email: email,
+        },
+      },
+    });
+  } catch (error) {
+    handleDbError(error, 'RefreshToken');
+  }
+};
+
 const deleteRefreshTokenByUserID = async (userId: number) => {
   try {
     return await prisma.refreshTokens.deleteMany({
@@ -367,4 +381,5 @@ export {
   getRefreshToken,
   deleteRefreshTokenByUserID,
   deleteExpiredTokens,
+  getTokenByEmail,
 };
