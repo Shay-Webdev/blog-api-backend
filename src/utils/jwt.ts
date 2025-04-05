@@ -5,7 +5,7 @@ dotenv.config();
 
 const generateToken = (user: IJwtPayload) => {
   const payload: IJwtPayload = {
-    sub: user.id.toString(),
+    sub: user.id,
     email: user.email,
     username: user.username,
     isAuthor: user.isAuthor,
@@ -20,4 +20,21 @@ const generateToken = (user: IJwtPayload) => {
   return token;
 };
 
-export { generateToken };
+const generateRefreshToken = (user: IJwtPayload) => {
+  const payload: IJwtPayload = {
+    sub: user.id.toString(),
+    email: user.email,
+    username: user.username,
+    isAuthor: user.isAuthor,
+  };
+
+  const secret = process.env.JWT_REFRESH_SECRET as string;
+  const options: jwt.SignOptions = {
+    algorithm: process.env.JWT_ALGORITHM as Algorithm,
+    expiresIn: '7d',
+  };
+  const token = jwt.sign(payload, secret, options);
+  return token;
+};
+
+export { generateToken, generateRefreshToken };

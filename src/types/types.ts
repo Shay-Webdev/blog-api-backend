@@ -105,6 +105,14 @@ interface IJwtPayload
   extends Pick<TUser, 'email' | 'username' | 'isAuthor'>,
     JwtPayload {}
 
+interface IRefreshToken {
+  id: number;
+  token: string;
+  userId: number;
+  createdAt: Date;
+  expiresAt: Date;
+  revoked: boolean;
+}
 export {
   TPost,
   TComment,
@@ -113,4 +121,5 @@ export {
   TErrorMessage,
   TStatusCode,
   IJwtPayload,
+  IRefreshToken,
 };

@@ -14,13 +14,14 @@ datasource db {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  username String
-  email    String    @unique
-  password String
-  posts    Post[]
-  comments Comment[]
-  isAuthor Boolean   @default(false)
+  id            Int             @id @default(autoincrement())
+  username      String
+  email         String          @unique
+  password      String
+  posts         Post[]
+  comments      Comment[]
+  isAuthor      Boolean         @default(false)
+  RefreshTokens RefreshTokens[]
 }
 
 model Post {
@@ -45,6 +46,16 @@ model Comment {
   isPosted    Boolean  @default(false)
   postedDate  DateTime @default(now())
   updatedDate DateTime @default(now())
+}
+
+model RefreshTokens {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
 }
 
 model Session {

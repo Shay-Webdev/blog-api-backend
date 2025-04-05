@@ -11,7 +11,9 @@ app.use(express.urlencoded({ extended: true }));
 configurePassport(app);
 app.use('/', indexRoute);
 app.all('*', (req: Request, res: Response) => {
-  throw new AppError(`Resource or Route not found`, 404);
+  throw new AppError(`Resource or Route not found`, 404, 'not_found', {
+    error: `invalid route: ${req.originalUrl}`,
+  });
 });
 app.use(errorHandler);
 

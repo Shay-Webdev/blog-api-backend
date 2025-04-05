@@ -1,0 +1,12 @@
+GET  http://localhost:3000/users
+Authorization:  Bearer 
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNSIsImVtYWlsIjoic3RldmVAbWFpbC5jb20iLCJ1c2VybmFtZSI6InN0ZXZlIiwiaXNBdXRob3IiOmZhbHNlLCJpYXQiOjE3NDM3NTUzMTEsImV4cCI6MTc0Mzc1NTM3MX0.e2lMGXbRJHx6v2rD3JeGmglnAFve2UsdCaGjUYnKRMY
+###
+
+POST  http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email":"steve@mail.com",
+    "password":"steve@123"
+}

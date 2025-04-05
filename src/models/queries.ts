@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import 'dotenv/config';
-import { TComment, TPost, TUser } from '../types/types.js';
+import { IRefreshToken, TComment, TPost, TUser } from '../types/types.js';
 import { handleDbError } from '../utils/dbErrorHandler.js';
 import { NotFoundError, ValidationError } from './errors.js';
 
@@ -291,6 +291,33 @@ const getAllPostsByUserId = async (userId: number) => {
     handleDbError(error, 'Post');
   }
 };
+
+const createRefreshToken = async (
+  refreshToken: Pick<IRefreshToken, 'userId' | 'token' | 'expiresAt'>
+) => {
+  try {
+    return await prisma.refreshTokens.create({
+      data: {
+        userId: refreshToken.userId,
+        token: refreshToken.token,
+        expiresAt: refreshToken.expiresAt,
+      },
+    });
+  } catch (error) {
+    handleDbError(error, 'RefreshToken');
+  }
+};
+
+const getRefreshToken = async (refreshToken: string) => {
+  try {
+    return await prisma.refreshTokens.findUnique({
+      where: { token: refreshToken },
+    });
+  } catch (error) {
+    handleDbError(error, 'RefreshToken');
+  }
+};
+
 export {
   getAllPosts,
   getAllUsers,
@@ -312,4 +339,6 @@ export {
   getDetailsByUserId,
   getAllCommentsByUserId,
   getAllPostsByUserId,
+  createRefreshToken,
+  getRefreshToken,
 };
