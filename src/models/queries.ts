@@ -3,6 +3,7 @@ import 'dotenv/config';
 import { IRefreshToken, TComment, TPost, TUser } from '../types/types.js';
 import { handleDbError } from '../utils/dbErrorHandler.js';
 import { NotFoundError, ValidationError } from './errors.js';
+import { refreshToken } from '../controllers/tokenController.js';
 
 const prisma = new PrismaClient();
 
@@ -318,6 +319,16 @@ const getRefreshToken = async (refreshToken: string) => {
   }
 };
 
+const deleteRefreshTokenByUserID = async (userId: number) => {
+  try {
+    return await prisma.refreshTokens.deleteMany({
+      where: { userId: userId },
+    });
+  } catch (error) {
+    handleDbError(error, 'RefreshToken');
+  }
+};
+
 export {
   getAllPosts,
   getAllUsers,
@@ -341,4 +352,5 @@ export {
   getAllPostsByUserId,
   createRefreshToken,
   getRefreshToken,
+  deleteRefreshTokenByUserID,
 };

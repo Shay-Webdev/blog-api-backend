@@ -59,4 +59,28 @@ const customJwtAuth = (req: Request, res: Response, next: NextFunction) => {
     };
 };
 
-export { customLocalAuth, customJwtAuth };
+const loginJwtAuth = (req: Request, res: Response, next: NextFunction) => {
+  passport.authenticate(
+    'jwt',
+    { session: false },
+    (
+      err: unknown,
+      user: IJwtPayload | false,
+      info: Record<string, unknown>
+    ) => {
+      if (err) return next(err);
+      if (info) {
+        throw new AppError(
+          info.message as TErrorMessage,
+          401,
+          'auth_failed',
+          info
+        );
+      }
+      if (user) req.user = user; // Set req.user if JWT is valid
+      next();
+    }
+  )(res, req, next);
+};
+
+export { customLocalAuth, customJwtAuth, loginJwtAuth };

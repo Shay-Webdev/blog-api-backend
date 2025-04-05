@@ -6,16 +6,23 @@ import { loginValidation } from '../validation/loginValidation.js';
 import { validationResult } from 'express-validator';
 import { AppError } from '../models/errors.js';
 import passport from 'passport';
-import { customLocalAuth } from '../authentication/customAuthError.js';
+import {
+  customLocalAuth,
+  loginJwtAuth,
+} from '../authentication/customAuthError.js';
 import { IReqUser } from '../types/request.js';
-import { IJwtPayload, IRefreshToken } from '../types/types.js';
+import { IJwtPayload, IRefreshToken, TUser } from '../types/types.js';
 import { generateKey } from 'crypto';
 import { generateRefreshToken, generateToken } from '../utils/jwt.js';
 
 const loginUser = [
   loginValidation,
-
   asyncHandler(async (req: IReqUser, res: Response, next: NextFunction) => {
+    if (req.isAuthenticated()) {
+      throw new AppError('Conflict occurred', 409, 'conflict', {
+        error: 'User already logged in : login controller',
+      });
+    }
     const errors = validationResult(req);
     const errorMessages = errors.array().map((error) => error.msg);
     if (!errors.isEmpty()) {
@@ -41,7 +48,7 @@ const loginUser = [
         );
       }
     }
-    console.log('req user in login', req.user);
+    console.log('req user in login pre local auth', req.user);
     next();
   }),
   customLocalAuth,
@@ -51,8 +58,8 @@ const loginUser = [
         error: 'user not found in login controller',
       });
     }
-    const token = await generateToken(req.user as IJwtPayload);
-    const refreshToken = await generateRefreshToken(req.user as IJwtPayload);
+    const token = await generateToken(req.user as TUser);
+    const refreshToken = await generateRefreshToken(req.user as TUser);
     const expireTime = 7 * 24 * 60 * 60 * 1000;
     const expireDate = new Date(Date.now() + expireTime);
     if (!token || !refreshToken) {
@@ -71,7 +78,7 @@ const loginUser = [
       token: refreshToken,
       expiresAt: expireDate,
     };
-    console.log('req.user in login:', req.user);
+    console.log('req.user in login post local auth:', req.user);
     console.log('tokens in login:', token, refreshToken);
     const refreshTokenInDb = await db.createRefreshToken(refreshTokenObj);
     console.log('refreshTokenInDb in login:', refreshTokenInDb);
