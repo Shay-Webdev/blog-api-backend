@@ -68,6 +68,10 @@ npm install passport-jwt @types/passport-jwt -- verify jwt
 openssl rand -base64 64 -- secret key
 npm i jsonwebtoken @types/jsonwebtoken -- sign jwt
 
+# cron for scheduled cleanup
+
+npm install node-cron @types/node-cron
+
 # tsconfig.json configuration
 
 --tsconfig bases

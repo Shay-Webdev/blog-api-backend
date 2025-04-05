@@ -329,6 +329,19 @@ const deleteRefreshTokenByUserID = async (userId: number) => {
   }
 };
 
+const deleteExpiredTokens = async (expiryDate: Date) => {
+  try {
+    return await prisma.refreshTokens.deleteMany({
+      where: {
+        expiresAt: { lte: expiryDate },
+        revoked: false,
+      },
+    });
+  } catch (error) {
+    handleDbError(error, 'RefreshToken');
+  }
+};
+
 export {
   getAllPosts,
   getAllUsers,
@@ -353,4 +366,5 @@ export {
   createRefreshToken,
   getRefreshToken,
   deleteRefreshTokenByUserID,
+  deleteExpiredTokens,
 };

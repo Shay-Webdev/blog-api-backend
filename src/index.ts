@@ -4,6 +4,7 @@ import indexRoute from './routes/index.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { AppError } from './models/errors.js';
 import configurePassport from './authentication/loginAuth.js';
+import { scheduledTokenCleanup } from './utils/cleanExpiredTokens.js';
 const app = express();
 
 app.use(express.json());
@@ -15,6 +16,7 @@ app.all('*', (req: Request, res: Response) => {
     error: `invalid route: ${req.originalUrl}`,
   });
 });
+scheduledTokenCleanup();
 app.use(errorHandler);
 
 app.listen(process.env.PORT || 3000, () =>
