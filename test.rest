@@ -8,8 +8,8 @@ POST  http://localhost:3000/login
 Content-Type: application/json
 
 {
-    "email":"steve@mail.com",
-    "password":"steve@123"
+    "email":"shay@mail.com",
+    "password":"Shay@12345"
 }
 
 ###
@@ -27,4 +27,17 @@ Content-Type: application/json
 
 {
     "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNSIsImVtYWlsIjoic3RldmVAbWFpbC5jb20iLCJ1c2VybmFtZSI6InN0ZXZlIiwiaXNBdXRob3IiOmZhbHNlLCJpYXQiOjE3NDM4MzUxODksImV4cCI6MTc0NDQzOTk4OX0.qE9peVLkg8UA4YQNHW9aJGzPPycLA-opw6RLGhBwXwM"
+}
+
+###
+
+POST http://localhost:3000/signup
+Content-Type: application/json
+
+{
+    "username":"shay",
+    "email":"shay@mail.com",
+    "password":"Shay@12345",
+    "isAuthor":"true"
+
 }
