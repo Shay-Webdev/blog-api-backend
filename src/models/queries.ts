@@ -1,9 +1,9 @@
-import { PrismaClient } from '@prisma/client';
-import 'dotenv/config';
-import { IRefreshToken, TComment, TPost, TUser } from '../types/types.js';
-import { handleDbError } from '../utils/dbErrorHandler.js';
-import { NotFoundError, ValidationError } from './errors.js';
-import { refreshToken } from '../controllers/tokenController.js';
+import { PrismaClient } from "@prisma/client";
+import "dotenv/config";
+import { IRefreshToken, TComment, TPost, TUser } from "../types/types.js";
+import { handleDbError } from "../utils/dbErrorHandler.js";
+import { NotFoundError, ValidationError } from "./errors.js";
+import { refreshToken } from "../controllers/tokenController.js";
 
 const prisma = new PrismaClient();
 
@@ -12,16 +12,16 @@ async function getAllPosts(): Promise<TPost[]> {
     const posts = await prisma.post.findMany({});
     return posts; // Empty array is fine if no posts exist
   } catch (error) {
-    handleDbError(error, 'Posts');
+    handleDbError(error, "Posts");
   }
 }
 
-async function getAllUsers(): Promise<Omit<TUser, 'posts' | 'comments'>[]> {
+async function getAllUsers(): Promise<Omit<TUser, "posts" | "comments">[]> {
   try {
     const users = await prisma.user.findMany();
     return users; // Empty array is fine
   } catch (error) {
-    handleDbError(error, 'Users');
+    handleDbError(error, "Users");
   }
 }
 
@@ -30,7 +30,7 @@ async function getAllComments(): Promise<TComment[]> {
     const comments = await prisma.comment.findMany();
     return comments; // Empty array is fine
   } catch (error) {
-    handleDbError(error, 'Comments');
+    handleDbError(error, "Comments");
   }
 }
 
@@ -40,7 +40,7 @@ async function getUserById(id: number) {
 
     return user;
   } catch (error) {
-    handleDbError(error, 'User');
+    handleDbError(error, "User");
   }
 }
 
@@ -52,7 +52,7 @@ async function getUserByEmail(email: string) {
     // }
     return user;
   } catch (error) {
-    handleDbError(error, 'User');
+    handleDbError(error, "User");
   }
 }
 
@@ -62,7 +62,7 @@ async function getPostById(id: number) {
 
     return post;
   } catch (error) {
-    handleDbError(error, 'Post');
+    handleDbError(error, "Post");
   }
 }
 
@@ -72,11 +72,11 @@ async function getCommentById(id: number) {
 
     return comment;
   } catch (error) {
-    handleDbError(error, 'Comment');
+    handleDbError(error, "Comment");
   }
 }
 
-async function createUser(user: Omit<TUser, 'id'>): Promise<TUser> {
+async function createUser(user: Omit<TUser, "id">): Promise<TUser> {
   try {
     return await prisma.user.create({
       data: {
@@ -87,7 +87,7 @@ async function createUser(user: Omit<TUser, 'id'>): Promise<TUser> {
       },
     });
   } catch (error) {
-    handleDbError(error, 'User');
+    handleDbError(error, "User");
   }
 }
 
@@ -102,12 +102,12 @@ async function makeAuthor(userId: number): Promise<TUser> {
       data: { isAuthor: true },
     });
   } catch (error) {
-    handleDbError(error, 'User');
+    handleDbError(error, "User");
   }
 }
 
 async function createPostByAuthorId(
-  post: Pick<TPost, 'title' | 'content' | 'authorId'>
+  post: Pick<TPost, "title" | "content" | "authorId">,
 ): Promise<TPost> {
   try {
     // Optional: Validate author exists and is an author
@@ -125,7 +125,7 @@ async function createPostByAuthorId(
       },
     });
   } catch (error) {
-    handleDbError(error, 'Post');
+    handleDbError(error, "Post");
   }
 }
 
@@ -140,12 +140,12 @@ async function uploadPostById(postId: number): Promise<TPost> {
       data: { isPublished: true },
     });
   } catch (error) {
-    handleDbError(error, 'Post');
+    handleDbError(error, "Post");
   }
 }
 
 async function createCommentByPostId(
-  comment: Pick<TComment, 'content' | 'postId' | 'userId'>
+  comment: Pick<TComment, "content" | "postId" | "userId">,
 ): Promise<TComment> {
   try {
     // Optional: Validate post exists
@@ -163,7 +163,7 @@ async function createCommentByPostId(
       },
     });
   } catch (error) {
-    handleDbError(error, 'Comment');
+    handleDbError(error, "Comment");
   }
 }
 
@@ -180,13 +180,13 @@ async function postCommentById(commentId: number): Promise<TComment> {
       data: { isPosted: true },
     });
   } catch (error) {
-    handleDbError(error, 'Comment');
+    handleDbError(error, "Comment");
   }
 }
 // updates
 
 const updateCommentById = async (
-  commentReq: Pick<TComment, 'content' | 'id'>
+  commentReq: Pick<TComment, "content" | "id">,
 ) => {
   try {
     const comment = await prisma.comment.findUnique({
@@ -200,12 +200,12 @@ const updateCommentById = async (
       data: { content: comment.content },
     });
   } catch (error) {
-    handleDbError(error, 'Comment');
+    handleDbError(error, "Comment");
   }
 };
 
 const updatePostById = async (
-  postReq: Pick<TPost, 'title' | 'content' | 'id'>
+  postReq: Pick<TPost, "title" | "content" | "id">,
 ) => {
   try {
     const post = await prisma.post.findUnique({
@@ -219,7 +219,7 @@ const updatePostById = async (
       data: { title: post.title, content: post.content },
     });
   } catch (error) {
-    handleDbError(error, 'Post');
+    handleDbError(error, "Post");
   }
 };
 
@@ -237,7 +237,7 @@ const deleteCommentById = async (commentId: number) => {
       where: { id: commentId },
     });
   } catch (error) {
-    handleDbError(error, 'Comment');
+    handleDbError(error, "Comment");
   }
 };
 
@@ -253,7 +253,7 @@ const deletePostById = async (postId: number) => {
       where: { id: postId },
     });
   } catch (error) {
-    handleDbError(error, 'Post');
+    handleDbError(error, "Post");
   }
 };
 
@@ -269,7 +269,7 @@ const getDetailsByUserId = async (userId: number) => {
       },
     });
   } catch (error) {
-    handleDbError(error, 'User');
+    handleDbError(error, "User");
   }
 };
 
@@ -279,7 +279,7 @@ const getAllCommentsByUserId = async (userId: number) => {
       where: { userId },
     });
   } catch (error) {
-    handleDbError(error, 'Comment');
+    handleDbError(error, "Comment");
   }
 };
 
@@ -289,12 +289,12 @@ const getAllPostsByUserId = async (userId: number) => {
       where: { authorId: userId },
     });
   } catch (error) {
-    handleDbError(error, 'Post');
+    handleDbError(error, "Post");
   }
 };
 
 const createRefreshToken = async (
-  refreshToken: Pick<IRefreshToken, 'userId' | 'token' | 'expiresAt'>
+  refreshToken: Pick<IRefreshToken, "userId" | "token" | "expiresAt">,
 ) => {
   try {
     return await prisma.refreshTokens.create({
@@ -305,7 +305,7 @@ const createRefreshToken = async (
       },
     });
   } catch (error) {
-    handleDbError(error, 'RefreshToken');
+    handleDbError(error, "RefreshToken");
   }
 };
 
@@ -315,7 +315,7 @@ const getRefreshToken = async (refreshToken: string) => {
       where: { token: refreshToken },
     });
   } catch (error) {
-    handleDbError(error, 'RefreshToken');
+    handleDbError(error, "RefreshToken");
   }
 };
 
@@ -329,7 +329,7 @@ const getTokenByEmail = async (email: string) => {
       },
     });
   } catch (error) {
-    handleDbError(error, 'RefreshToken');
+    handleDbError(error, "RefreshToken");
   }
 };
 
@@ -339,7 +339,7 @@ const deleteRefreshTokenByUserID = async (userId: number) => {
       where: { userId: userId },
     });
   } catch (error) {
-    handleDbError(error, 'RefreshToken');
+    handleDbError(error, "RefreshToken");
   }
 };
 
@@ -352,7 +352,7 @@ const deleteExpiredTokens = async (expiryDate: Date) => {
       },
     });
   } catch (error) {
-    handleDbError(error, 'RefreshToken');
+    handleDbError(error, "RefreshToken");
   }
 };
 
