@@ -17,15 +17,15 @@ const logout = asyncHandler(
       });
     }
 
-    const refreshToken = req.body.refreshToken as string | undefined;
+    //    const refreshToken = req.body.refreshToken as string | undefined;
     const user = req.user as TUser;
-    console.log("refreshToken and user in logout:", refreshToken, user);
+    console.log("user in logout:", user);
 
-    if (!refreshToken) {
-      throw new AppError("Authentication required", 401, "access_denied", {
-        error: "no refresh token in logout",
-      });
-    }
+    //    if (!refreshToken) {
+    //      throw new AppError("Authentication required", 401, "access_denied", {
+    //        error: "no refresh token in logout",
+    //      });
+    //    }
     const deletedRefreshToken = db.deleteRefreshTokenByUserID(user.id);
     sendSuccess(res, { deletedRefreshToken }, 200, "Logged out successfully");
   },
