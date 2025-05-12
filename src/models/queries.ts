@@ -33,9 +33,20 @@ async function getAllUsers(): Promise<Omit<TUser, "posts" | "comments">[]> {
   }
 }
 
-async function getAllComments(): Promise<TComment[]> {
+async function getAllComments(postId: number): Promise<TComment[]> {
   try {
-    const comments = await prisma.comment.findMany();
+    const comments = await prisma.comment.findMany({
+      where: {
+        postId,
+      },
+      include: {
+        user: {
+          select: {
+            username: true,
+          },
+        },
+      },
+    });
     return comments; // Empty array is fine
   } catch (error) {
     handleDbError(error, "Comments");

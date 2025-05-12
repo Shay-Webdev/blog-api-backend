@@ -46,6 +46,8 @@ const getPostById = asyncHandler(async function (
     throw new AppError("Authentication required", 401, "unauthorized");
   }
   const postId: number = Number(req.params.postId);
+  console.log(`params in get post by id: `, req.params);
+  console.log(`url in get post by id: `, req.originalUrl);
   const post = await db.getPostById(postId);
   if (!post) {
     throw new AppError("Resource or Route not found", 404, "not_found");
