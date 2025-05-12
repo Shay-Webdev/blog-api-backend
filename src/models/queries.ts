@@ -9,7 +9,15 @@ const prisma = new PrismaClient();
 
 async function getAllPosts(): Promise<TPost[]> {
   try {
-    const posts = await prisma.post.findMany({});
+    const posts = await prisma.post.findMany({
+      include: {
+        author: {
+          select: {
+            username: true,
+          },
+        },
+      },
+    });
     return posts; // Empty array is fine if no posts exist
   } catch (error) {
     handleDbError(error, "Posts");
@@ -58,7 +66,16 @@ async function getUserByEmail(email: string) {
 
 async function getPostById(id: number) {
   try {
-    const post = await prisma.post.findUnique({ where: { id } });
+    const post = await prisma.post.findUnique({
+      where: { id },
+      include: {
+        author: {
+          select: {
+            username: true,
+          },
+        },
+      },
+    });
 
     return post;
   } catch (error) {
