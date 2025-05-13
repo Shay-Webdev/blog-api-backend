@@ -2,12 +2,12 @@
   "extends": "@tsconfig/node22/tsconfig.json",
   "compilerOptions": {
     "typeRoots": ["node_modules/@types"],
+    "types": ["node", "express"],
     "module": "NodeNext",
     "moduleResolution": "nodenext",
     "outDir": "./dist",
-    "sourceMap": true,
     "rootDir": "./src",
-    "types": ["node", "@types/express"]
+    "sourceMap": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
