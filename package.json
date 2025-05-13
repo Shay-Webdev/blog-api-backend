@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc && node dist/index.js",
+    "build": "tsc",
+    "start": "node dist/index.js",
     "typecheck": "tsc --watch --noEmit",
     "p:gen": "prisma generate",
     "p:mig": "prisma migrate dev",
@@ -49,15 +50,15 @@
     "pg": "^8.14.1"
   },
   "devDependencies": {
-    "@tsconfig/node22": "^22.0.0",
+    "@tsconfig/node22": "^22.0.1",
     "@types/bcryptjs": "^2.4.6",
     "@types/connect-flash": "^0.0.40",
     "@types/connect-pg-simple": "^7.0.3",
     "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.0",
+    "@types/express": "^5.0.1",
     "@types/express-session": "^1.18.1",
     "@types/multer": "^1.4.12",
-    "@types/node": "^22.13.10",
+    "@types/node": "^22.15.17",
     "@types/passport": "^1.0.17",
     "@types/passport-local": "^1.0.38",
     "prisma": "^6.7.0",
