@@ -54,6 +54,7 @@
     "typescript": "^5.8.3"
   },
   "devDependencies": {
+    "@tsconfig/node22": "^22.0.1",
     "@types/bcryptjs": "^2.4.6",
     "@types/connect-flash": "^0.0.40",
     "@types/connect-pg-simple": "^7.0.3",
