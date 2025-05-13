@@ -1,0 +1,1 @@
+{"version":3,"file":"signupRoute.js","sourceRoot":"","sources":["../../src/routes/signupRoute.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAE,MAAM,SAAS,CAAC;AACjC,MAAM,WAAW,GAAG,MAAM,EAAE,CAAC;AAC7B,OAAO,KAAK,gBAAgB,MAAM,oCAAoC,CAAC;AAIvE,WAAW,CAAC,IAAI,CAAC,GAAG,EAAE,GAAG,gBAAgB,CAAC,UAAU,CAAC,CAAC;AAEtD,eAAe,WAAW,CAAC"}
