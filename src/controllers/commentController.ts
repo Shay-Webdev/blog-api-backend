@@ -30,8 +30,10 @@ const createComment = asyncHandler(async function (
     throw new AppError("Authentication required", 401, "unauthorized");
   }
 
+  console.log(`req user in create comments: `, req.user);
+  const reqUser = req.user as IJwtPayload;
   const commentContent = req.body;
-  const userId = req.user.id;
+  const userId = Number(reqUser.sub);
   const postId = Number(req.params.postId);
   const comment: Pick<TComment, "content" | "postId" | "userId"> = {
     content: commentContent.content,

@@ -14,7 +14,8 @@ const getAllPostsByUser = asyncHandler(async function (
   if (!req.user) {
     throw new AppError("Authentication required", 401, "unauthorized");
   }
-  const userId: number = Number(req.params.userId);
+  const user = req.user as IJwtPayload;
+  const userId: number = Number(user.sub);
   const posts = await db.getAllPostsByUserId(userId);
   if (!posts) {
     throw new AppError("Resource or Route not found", 404, "not_found");
@@ -46,8 +47,6 @@ const getPostById = asyncHandler(async function (
     throw new AppError("Authentication required", 401, "unauthorized");
   }
   const postId: number = Number(req.params.postId);
-  console.log(`params in get post by id: `, req.params);
-  console.log(`url in get post by id: `, req.originalUrl);
   const post = await db.getPostById(postId);
   if (!post) {
     throw new AppError("Resource or Route not found", 404, "not_found");
